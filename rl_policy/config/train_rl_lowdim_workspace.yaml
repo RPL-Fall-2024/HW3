@@ -1,0 +1,31 @@
+defaults:
+  - _self_
+  - task: pusht_lowdim
+
+name: train_rl_pusht_lowdim
+_target_: rl_policy.workspace.train_rl_lowdim_workspace.TrainRLLowDimWorkspace
+
+task_name: ${task.name}
+exp_name: "default"
+
+policy:
+  log_std_init: 3
+
+training:
+  device: "cuda:0"
+  n_steps_collect_rollout: ${task.env.time_limit}
+  lr: 3e-4
+  batch_size: 256
+  n_epochs_per_rollout: 20
+  discount_factor: 0.99
+  td_lambda: 1.0
+  clip_range: 0.2
+  normalize_advantage: True
+  ent_coef: 0.0
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  stats_window_size: 100
+  seed: 42
+
+testing:
+  n_eval_episodes: 1
